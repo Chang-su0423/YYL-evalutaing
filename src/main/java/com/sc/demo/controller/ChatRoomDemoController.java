@@ -1,16 +1,13 @@
-package com.sc.demo;
+package com.sc.demo.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-@RequestMapping("/chatroom")
 @RestController
+@RequestMapping("/chatroom")
 public class ChatRoomDemoController {
     //使用map集合存储聊天室与聊天室中人员的对应关系(未进行持久化保存)
     //使用concurrentHashMap保证并发请求的线程安全
@@ -19,7 +16,7 @@ public class ChatRoomDemoController {
 
     // 加入聊天室
     //发送请求时应在路径上带上userid和roomid
-    @PostMapping("/join")
+    @GetMapping("/join")
     public String joinRoom(@RequestParam String roomId, @RequestParam String userId) {
         //roomMap线程安全，无需加锁
         roomMap.putIfAbsent(roomId, ConcurrentHashMap.newKeySet());
@@ -40,7 +37,7 @@ public class ChatRoomDemoController {
 
     // 退出聊天室
     //发送请求时应在路径上带上userid和roomid
-    @PostMapping("/leave")
+    @GetMapping("/leave")
     public String leaveRoom(@RequestParam String roomId, @RequestParam String userId) {
         //roomMap线程安全，无需加锁
         Set<String> roomUsers = roomMap.get(roomId);
